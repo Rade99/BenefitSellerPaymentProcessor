@@ -123,7 +123,6 @@ namespace API.Data.Migrations
                         .Annotation("Sqlite:Autoincrement", true),
                     DateTime = table.Column<DateTime>(type: "TEXT", nullable: false),
                     Amount = table.Column<decimal>(type: "TEXT", nullable: false),
-                    IsSuccessful = table.Column<bool>(type: "INTEGER", nullable: false),
                     CardID = table.Column<int>(type: "INTEGER", nullable: false),
                     MerchantID = table.Column<int>(type: "INTEGER", nullable: false)
                 },
@@ -204,19 +203,25 @@ namespace API.Data.Migrations
 
             migrationBuilder.InsertData(
                 table: "Transactions",
-                columns: new[] { "ID", "Amount", "CardID", "DateTime", "IsSuccessful", "MerchantID" },
+                columns: new[] { "ID", "Amount", "CardID", "DateTime", "MerchantID" },
                 values: new object[,]
                 {
-                    { 1, 16000m, 1, new DateTime(2024, 4, 29, 19, 6, 48, 844, DateTimeKind.Local).AddTicks(770), true, 1 },
-                    { 2, 250m, 2, new DateTime(2024, 4, 29, 19, 6, 48, 844, DateTimeKind.Local).AddTicks(858), true, 2 },
-                    { 3, 10000.55m, 3, new DateTime(2024, 4, 29, 19, 6, 48, 844, DateTimeKind.Local).AddTicks(868), true, 3 },
-                    { 4, 1500.12m, 4, new DateTime(2024, 4, 29, 19, 6, 48, 844, DateTimeKind.Local).AddTicks(876), false, 4 }
+                    { 1, 16000m, 1, new DateTime(2024, 5, 2, 11, 36, 23, 194, DateTimeKind.Local).AddTicks(4685), 1 },
+                    { 2, 250m, 2, new DateTime(2024, 5, 2, 11, 36, 23, 194, DateTimeKind.Local).AddTicks(4741), 2 },
+                    { 3, 10000.55m, 3, new DateTime(2024, 5, 2, 11, 36, 23, 194, DateTimeKind.Local).AddTicks(4745), 3 },
+                    { 4, 1500.12m, 4, new DateTime(2024, 5, 2, 11, 36, 23, 194, DateTimeKind.Local).AddTicks(4748), 4 }
                 });
 
             migrationBuilder.CreateIndex(
                 name: "IX_Benefits_MerchantID",
                 table: "Benefits",
                 column: "MerchantID");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Cards_CardNumber",
+                table: "Cards",
+                column: "CardNumber",
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_Cards_UserID",
@@ -243,6 +248,12 @@ namespace API.Data.Migrations
                 name: "IX_Users_CustomerCompanyID",
                 table: "Users",
                 column: "CustomerCompanyID");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Users_Email",
+                table: "Users",
+                column: "Email",
+                unique: true);
         }
 
         /// <inheritdoc />

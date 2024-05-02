@@ -1,5 +1,8 @@
+using Microsoft.EntityFrameworkCore;
+
 namespace API.Entities
 {
+    [Index(nameof(Email), IsUnique = true)]
     public class User
     {
         public int ID { get; set; }

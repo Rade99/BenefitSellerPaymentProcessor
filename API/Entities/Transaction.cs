@@ -5,7 +5,6 @@ namespace API.Entities
         public int ID { get; set; }
         public DateTime DateTime { get; set; }
         public decimal Amount { get; set; }
-        public bool IsSuccessful { get; set; }
 
         public int CardID { get; set; }
         public Card Card { get; set; }

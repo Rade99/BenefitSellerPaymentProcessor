@@ -57,10 +57,10 @@ namespace API.Data
                 );
 
             modelBuilder.Entity<Transaction>().HasData(
-                new Transaction { ID = 1, DateTime = DateTime.Now, Amount = 16000, IsSuccessful = true, CardID = 1, MerchantID = 1 },
-                new Transaction { ID = 2, DateTime = DateTime.Now, Amount = 250, IsSuccessful = true, CardID = 2, MerchantID = 2 },
-                new Transaction { ID = 3, DateTime = DateTime.Now, Amount = 10000.55m, IsSuccessful = true, CardID = 3, MerchantID = 3 },
-                new Transaction { ID = 4, DateTime = DateTime.Now, Amount = 1500.12m, IsSuccessful = false, CardID = 4, MerchantID = 4 }
+                new Transaction { ID = 1, DateTime = DateTime.Now, Amount = 16000, CardID = 1, MerchantID = 1 },
+                new Transaction { ID = 2, DateTime = DateTime.Now, Amount = 250, CardID = 2, MerchantID = 2 },
+                new Transaction { ID = 3, DateTime = DateTime.Now, Amount = 10000.55m, CardID = 3, MerchantID = 3 },
+                new Transaction { ID = 4, DateTime = DateTime.Now, Amount = 1500.12m, CardID = 4, MerchantID = 4 }
                 );
 
             base.OnModelCreating(modelBuilder);

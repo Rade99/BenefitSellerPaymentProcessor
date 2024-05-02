@@ -1,5 +1,8 @@
+using Microsoft.EntityFrameworkCore;
+
 namespace API.Entities
 {
+    [Index(nameof(CardNumber), IsUnique = true)]
     public class Card
     {
         public int ID { get; set; }

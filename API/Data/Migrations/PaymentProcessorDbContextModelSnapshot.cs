@@ -96,6 +96,9 @@ namespace API.Data.Migrations
 
                     b.HasKey("ID");
 
+                    b.HasIndex("CardNumber")
+                        .IsUnique();
+
                     b.HasIndex("UserID")
                         .IsUnique();
 
@@ -259,9 +262,6 @@ namespace API.Data.Migrations
                     b.Property<DateTime>("DateTime")
                         .HasColumnType("TEXT");
 
-                    b.Property<bool>("IsSuccessful")
-                        .HasColumnType("INTEGER");
-
                     b.Property<int>("MerchantID")
                         .HasColumnType("INTEGER");
 
@@ -279,8 +279,7 @@ namespace API.Data.Migrations
                             ID = 1,
                             Amount = 16000m,
                             CardID = 1,
-                            DateTime = new DateTime(2024, 4, 29, 19, 6, 48, 844, DateTimeKind.Local).AddTicks(770),
-                            IsSuccessful = true,
+                            DateTime = new DateTime(2024, 5, 2, 11, 36, 23, 194, DateTimeKind.Local).AddTicks(4685),
                             MerchantID = 1
                         },
                         new
@@ -288,8 +287,7 @@ namespace API.Data.Migrations
                             ID = 2,
                             Amount = 250m,
                             CardID = 2,
-                            DateTime = new DateTime(2024, 4, 29, 19, 6, 48, 844, DateTimeKind.Local).AddTicks(858),
-                            IsSuccessful = true,
+                            DateTime = new DateTime(2024, 5, 2, 11, 36, 23, 194, DateTimeKind.Local).AddTicks(4741),
                             MerchantID = 2
                         },
                         new
@@ -297,8 +295,7 @@ namespace API.Data.Migrations
                             ID = 3,
                             Amount = 10000.55m,
                             CardID = 3,
-                            DateTime = new DateTime(2024, 4, 29, 19, 6, 48, 844, DateTimeKind.Local).AddTicks(868),
-                            IsSuccessful = true,
+                            DateTime = new DateTime(2024, 5, 2, 11, 36, 23, 194, DateTimeKind.Local).AddTicks(4745),
                             MerchantID = 3
                         },
                         new
@@ -306,8 +303,7 @@ namespace API.Data.Migrations
                             ID = 4,
                             Amount = 1500.12m,
                             CardID = 4,
-                            DateTime = new DateTime(2024, 4, 29, 19, 6, 48, 844, DateTimeKind.Local).AddTicks(876),
-                            IsSuccessful = false,
+                            DateTime = new DateTime(2024, 5, 2, 11, 36, 23, 194, DateTimeKind.Local).AddTicks(4748),
                             MerchantID = 4
                         });
                 });
@@ -336,6 +332,9 @@ namespace API.Data.Migrations
                     b.HasKey("ID");
 
                     b.HasIndex("CustomerCompanyID");
+
+                    b.HasIndex("Email")
+                        .IsUnique();
 
                     b.ToTable("Users");
 
