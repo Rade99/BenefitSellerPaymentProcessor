@@ -1,6 +1,4 @@
 using Microsoft.AspNetCore.Mvc;
-using System.Threading.Tasks;
-using API.Entities;
 using API.Services;
 using API.DTOs;
 

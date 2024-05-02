@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using System.ComponentModel.DataAnnotations;
 
 namespace API.Entities
 {
@@ -8,7 +9,9 @@ namespace API.Entities
         public int ID { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
+        [Required]
         public UserType UserType { get; set; }
+        [Required]
         public string Email { get; set; }
 
         public Card Card { get; set; }

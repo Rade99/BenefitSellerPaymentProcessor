@@ -34,17 +34,9 @@ namespace API.Services
             await _dbContext.SaveChangesAsync();
         }
 
-        public async Task<User> GetUserByCardIdAsync(int cardId)
-        {
-            return await _dbContext.Users
-                                    .Include(u => u.Card)
-                                    .FirstOrDefaultAsync(u => u.Card.ID == cardId);
-        }
-
         public async Task<CustomerCompany> GetCompanyByUserIdAsync(int userId)
         {
             return await _dbContext.CustomerCompanies
-                                    .Include(c => c.Employees)
                                     .Include(c => c.MerchantsWithDiscountForPlatinumUsers)
                                     .FirstOrDefaultAsync(c => c.Employees.Any(e => e.ID == userId));
         }

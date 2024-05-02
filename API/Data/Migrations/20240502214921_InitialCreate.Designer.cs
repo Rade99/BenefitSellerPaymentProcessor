@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace API.Data.Migrations
 {
     [DbContext(typeof(PaymentProcessorDbContext))]
-    [Migration("20240502093623_InitialCreate")]
+    [Migration("20240502214921_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -33,6 +33,7 @@ namespace API.Data.Migrations
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("Name")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<decimal>("Price")
@@ -89,6 +90,7 @@ namespace API.Data.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<string>("CardNumber")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<DateTime>("ExpiryDate")
@@ -168,6 +170,7 @@ namespace API.Data.Migrations
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("Name")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.HasKey("ID");
@@ -211,6 +214,7 @@ namespace API.Data.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Name")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.HasKey("ID");
@@ -282,7 +286,7 @@ namespace API.Data.Migrations
                             ID = 1,
                             Amount = 16000m,
                             CardID = 1,
-                            DateTime = new DateTime(2024, 5, 2, 11, 36, 23, 194, DateTimeKind.Local).AddTicks(4685),
+                            DateTime = new DateTime(2024, 5, 2, 23, 49, 20, 631, DateTimeKind.Local).AddTicks(1052),
                             MerchantID = 1
                         },
                         new
@@ -290,7 +294,7 @@ namespace API.Data.Migrations
                             ID = 2,
                             Amount = 250m,
                             CardID = 2,
-                            DateTime = new DateTime(2024, 5, 2, 11, 36, 23, 194, DateTimeKind.Local).AddTicks(4741),
+                            DateTime = new DateTime(2024, 5, 2, 23, 49, 20, 631, DateTimeKind.Local).AddTicks(1138),
                             MerchantID = 2
                         },
                         new
@@ -298,7 +302,7 @@ namespace API.Data.Migrations
                             ID = 3,
                             Amount = 10000.55m,
                             CardID = 3,
-                            DateTime = new DateTime(2024, 5, 2, 11, 36, 23, 194, DateTimeKind.Local).AddTicks(4745),
+                            DateTime = new DateTime(2024, 5, 2, 23, 49, 20, 631, DateTimeKind.Local).AddTicks(1148),
                             MerchantID = 3
                         },
                         new
@@ -306,7 +310,7 @@ namespace API.Data.Migrations
                             ID = 4,
                             Amount = 1500.12m,
                             CardID = 4,
-                            DateTime = new DateTime(2024, 5, 2, 11, 36, 23, 194, DateTimeKind.Local).AddTicks(4748),
+                            DateTime = new DateTime(2024, 5, 2, 23, 49, 20, 631, DateTimeKind.Local).AddTicks(1155),
                             MerchantID = 4
                         });
                 });
@@ -321,6 +325,7 @@ namespace API.Data.Migrations
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("Email")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<string>("FirstName")

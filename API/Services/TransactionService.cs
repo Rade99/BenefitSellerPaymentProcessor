@@ -15,12 +15,8 @@ namespace API.Services
         public async Task<ResponseDto> ProcessTransactionAsync(TransactionDto transactionDto)
         {
             var validationResponse = await ValidateBenefitAsync(transactionDto.BenefitId);
-            if (!validationResponse.IsSuccessful)
-            {
-
-                return validationResponse;
-            }
-
+            if (!validationResponse.IsSuccessful) return validationResponse;
+            
             var benefit = (Benefit)validationResponse.Data;
 
             validationResponse = await ValidateCardAsync(transactionDto.CardId);

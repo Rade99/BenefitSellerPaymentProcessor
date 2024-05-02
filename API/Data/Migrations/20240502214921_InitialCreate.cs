@@ -19,7 +19,7 @@ namespace API.Data.Migrations
                 {
                     ID = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
-                    Name = table.Column<string>(type: "TEXT", nullable: true),
+                    Name = table.Column<string>(type: "TEXT", nullable: false),
                     BenefitCategoryForStandardUsers = table.Column<int>(type: "INTEGER", nullable: false)
                 },
                 constraints: table =>
@@ -33,7 +33,7 @@ namespace API.Data.Migrations
                 {
                     ID = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
-                    Name = table.Column<string>(type: "TEXT", nullable: true),
+                    Name = table.Column<string>(type: "TEXT", nullable: false),
                     Category = table.Column<int>(type: "INTEGER", nullable: false),
                     DiscountForPlatinumUsers = table.Column<decimal>(type: "TEXT", nullable: false),
                     CustomerCompanyID = table.Column<int>(type: "INTEGER", nullable: true)
@@ -57,7 +57,7 @@ namespace API.Data.Migrations
                     FirstName = table.Column<string>(type: "TEXT", nullable: true),
                     LastName = table.Column<string>(type: "TEXT", nullable: true),
                     UserType = table.Column<int>(type: "INTEGER", nullable: false),
-                    Email = table.Column<string>(type: "TEXT", nullable: true),
+                    Email = table.Column<string>(type: "TEXT", nullable: false),
                     CustomerCompanyID = table.Column<int>(type: "INTEGER", nullable: false)
                 },
                 constraints: table =>
@@ -77,7 +77,7 @@ namespace API.Data.Migrations
                 {
                     ID = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
-                    Name = table.Column<string>(type: "TEXT", nullable: true),
+                    Name = table.Column<string>(type: "TEXT", nullable: false),
                     Price = table.Column<decimal>(type: "TEXT", nullable: false),
                     Category = table.Column<int>(type: "INTEGER", nullable: false),
                     MerchantID = table.Column<int>(type: "INTEGER", nullable: false)
@@ -99,7 +99,7 @@ namespace API.Data.Migrations
                 {
                     ID = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
-                    CardNumber = table.Column<string>(type: "TEXT", nullable: true),
+                    CardNumber = table.Column<string>(type: "TEXT", nullable: false),
                     ExpiryDate = table.Column<DateTime>(type: "TEXT", nullable: false),
                     Balance = table.Column<decimal>(type: "TEXT", nullable: false),
                     UserID = table.Column<int>(type: "INTEGER", nullable: false)
@@ -206,10 +206,10 @@ namespace API.Data.Migrations
                 columns: new[] { "ID", "Amount", "CardID", "DateTime", "MerchantID" },
                 values: new object[,]
                 {
-                    { 1, 16000m, 1, new DateTime(2024, 5, 2, 11, 36, 23, 194, DateTimeKind.Local).AddTicks(4685), 1 },
-                    { 2, 250m, 2, new DateTime(2024, 5, 2, 11, 36, 23, 194, DateTimeKind.Local).AddTicks(4741), 2 },
-                    { 3, 10000.55m, 3, new DateTime(2024, 5, 2, 11, 36, 23, 194, DateTimeKind.Local).AddTicks(4745), 3 },
-                    { 4, 1500.12m, 4, new DateTime(2024, 5, 2, 11, 36, 23, 194, DateTimeKind.Local).AddTicks(4748), 4 }
+                    { 1, 16000m, 1, new DateTime(2024, 5, 2, 23, 49, 20, 631, DateTimeKind.Local).AddTicks(1052), 1 },
+                    { 2, 250m, 2, new DateTime(2024, 5, 2, 23, 49, 20, 631, DateTimeKind.Local).AddTicks(1138), 2 },
+                    { 3, 10000.55m, 3, new DateTime(2024, 5, 2, 23, 49, 20, 631, DateTimeKind.Local).AddTicks(1148), 3 },
+                    { 4, 1500.12m, 4, new DateTime(2024, 5, 2, 23, 49, 20, 631, DateTimeKind.Local).AddTicks(1155), 4 }
                 });
 
             migrationBuilder.CreateIndex(
