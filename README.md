@@ -36,6 +36,27 @@ The Benefit Card Payment Processor is a transaction processing system designed t
 3. Open the Solution file `BenefitCardPaymentProcessor.sln`.
 4. Build and run the application.
 
+## Docker Support
+
+The project also supports Docker containers for easier management and distribution. To run the application using Docker, follow these steps:
+
+### Building Docker Image
+
+Run the following command in your terminal within the root directory of the project to build the Docker image:
+
+```bash
+docker build -t payment-processor -f API/Dockerfile .
+```
+
+### Creating Docker Container
+
+Once the image is built, run the Docker container using the following command:
+
+```bash
+docker run --name payment-processor -e ASPNETCORE_ENVIRONMENT=Development -p 8080:8080 -p 8081:8081 payment-processor
+```
+**Note:** Setting `ASPNETCORE_ENVIRONMENT=Development` is there becouse of Swagger.
+
 ## Swagger
 
 Swagger is a tool that allows for documenting and testing APIs. The API has Swagger integration for testing the API's functionality. Swagger will be available at the `/swagger` endpoint when the application is running in the Development environment.
