@@ -23,30 +23,15 @@ namespace API.Services
             if (!validationResponse.IsSuccessful) return validationResponse;
 
             var card = (Card)validationResponse.Data;
-
-            validationResponse = await ValidateMerchantAsync(transactionDto.MerchantId);
-            if (!validationResponse.IsSuccessful) return validationResponse;
-
-            var merchant = (Merchant)validationResponse.Data;
-
+           
             var user = await _dataAccessService.GetUserByIdAsync(card.UserID);
             var company = await _dataAccessService.GetCompanyByUserIdAsync(user.ID);
+            var merchant = benefit.Merchant;
 
             validationResponse = ValidateUserBenefitAccess(user.UserType, company.BenefitCategoryForStandardUsers, merchant.Category);
             if (!validationResponse.IsSuccessful) return validationResponse;
 
-            decimal transactionAmount;
-            if (user.UserType == UserType.Platinum && company.MerchantsWithDiscountForPlatinumUsers.Contains(merchant))
-            {
-                var discount = merchant.DiscountForPlatinumUsers;
-                var discountedPrice = benefit.Price * (1 - discount);
-
-                transactionAmount = discountedPrice;
-            }
-            else
-            {
-                transactionAmount = benefit.Price;
-            }
+            decimal transactionAmount = CalculateTransactionAmount(benefit, user.UserType, company);
 
             validationResponse = ValidateCardBalance(card, transactionAmount);
             if (!validationResponse.IsSuccessful) return validationResponse;
@@ -112,23 +97,6 @@ namespace API.Services
             return result;
         }
 
-        private async Task<ResponseDto> ValidateMerchantAsync(int merchantId)
-        {
-            var result = new ResponseDto();
-
-            var merchant = await _dataAccessService.GetMerchantByIdAsync(merchantId);
-            if (merchant == null)
-            {
-                result.Message = $"Merchant with ID {merchantId} does not exist.";
-                return result;
-            }
-
-            result.IsSuccessful = true;
-            result.Data = merchant;
-
-            return result;
-        }
-
         private ResponseDto ValidateCardBalance(Card card, decimal transactionAmount)
         {
             var result = new ResponseDto();
@@ -155,6 +123,26 @@ namespace API.Services
 
             result.IsSuccessful = true;
             return result;
+        }
+
+        private decimal CalculateTransactionAmount(Benefit benefit, UserType userType, CustomerCompany company)
+        {          
+            decimal transactionAmount;
+            var merchant = benefit.Merchant;
+
+            if (userType == UserType.Platinum && company.MerchantsWithDiscountForPlatinumUsers.Contains(merchant))
+            {         
+                var discount = merchant.DiscountForPlatinumUsers;
+                var discountedPrice = benefit.Price * (1 - discount);
+
+                transactionAmount = discountedPrice;
+            }
+            else
+            {
+                transactionAmount = benefit.Price;
+            }
+
+            return transactionAmount;
         }
     }
 }

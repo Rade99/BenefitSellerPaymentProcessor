@@ -49,11 +49,12 @@ namespace API.Data
                  new Benefit { ID = 4, Name = "Online Course", Price = 10000, Category = BenefitCategory.Education, MerchantID = 4 }
                 );
 
+                
             modelBuilder.Entity<Merchant>().HasData(
-                new Merchant { ID = 1, Name = "Pause", Category = BenefitCategory.FoodAndDrink, DiscountForPlatinumUsers = 0.10m },
-                new Merchant { ID = 2, Name = "MegaGym", Category = BenefitCategory.Recreation, DiscountForPlatinumUsers = 0.15m },
-                new Merchant { ID = 3, Name = "Museum of Contemporary Art", Category = BenefitCategory.Culture, DiscountForPlatinumUsers = 0.20m },
-                new Merchant { ID = 4, Name = "Educons Online Learning ", Category = BenefitCategory.Education, DiscountForPlatinumUsers = 0.25m }
+                new Merchant { ID = 1, Name = "Pause", Category = BenefitCategory.FoodAndDrink, DiscountForPlatinumUsers = 0.10m, CustomerCompanyId = 1 },
+                new Merchant { ID = 2, Name = "MegaGym", Category = BenefitCategory.Recreation, DiscountForPlatinumUsers = 0.15m, CustomerCompanyId = 1 },
+                new Merchant { ID = 3, Name = "Museum of Contemporary Art", Category = BenefitCategory.Culture, DiscountForPlatinumUsers = 0.20m, CustomerCompanyId = 2 },
+                new Merchant { ID = 4, Name = "Educons Online Learning ", Category = BenefitCategory.Education, DiscountForPlatinumUsers = 0.25m, CustomerCompanyId = 3 }
                 );
 
             modelBuilder.Entity<Transaction>().HasData(

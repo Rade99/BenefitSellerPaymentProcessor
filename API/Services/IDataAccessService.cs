@@ -6,7 +6,6 @@ namespace API.Services
     {
         Task<Card> GetCardByIdAsync(int cardId);
         Task UpdateCardAsync(Card card);
-        Task<Merchant> GetMerchantByIdAsync(int merchantId);
         Task AddTransactionAsync(Transaction transaction);
         Task<CustomerCompany> GetCompanyByUserIdAsync(int userId);
         Task<Benefit> GetBenefitByIdAsync(int benefitId);

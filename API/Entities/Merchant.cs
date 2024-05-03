@@ -11,7 +11,9 @@ namespace API.Entities
         public BenefitCategory Category { get; set; }
         [Required]
         public decimal DiscountForPlatinumUsers { get; set; }
-
+        
+        public int CustomerCompanyId { get; set; }
+        public CustomerCompany CustomerCompany { get; set; }
         public List<Benefit> Benefits { get; set; }
     }
 }

@@ -23,11 +23,6 @@ namespace API.Services
             await _dbContext.SaveChangesAsync();
         }
 
-        public async Task<Merchant> GetMerchantByIdAsync(int merchantId)
-        {
-            return await _dbContext.Merchants.FindAsync(merchantId);
-        }
-
         public async Task AddTransactionAsync(Transaction transaction)
         {
             _dbContext.Transactions.Add(transaction);
@@ -43,7 +38,9 @@ namespace API.Services
 
         public async Task<Benefit> GetBenefitByIdAsync(int benefitId)
         {
-            return await _dbContext.Benefits.FindAsync(benefitId);
+            return await _dbContext.Benefits
+                                    .Include(b => b.Merchant)
+                                    .FirstOrDefaultAsync(b => b.ID == benefitId);
         }
 
         public async Task<User> GetUserByIdAsync(int userId)

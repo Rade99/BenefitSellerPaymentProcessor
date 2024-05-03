@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace API.Data.Migrations
 {
     [DbContext(typeof(PaymentProcessorDbContext))]
-    [Migration("20240502214921_InitialCreate")]
+    [Migration("20240503124435_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -207,7 +207,7 @@ namespace API.Data.Migrations
                     b.Property<int>("Category")
                         .HasColumnType("INTEGER");
 
-                    b.Property<int?>("CustomerCompanyID")
+                    b.Property<int>("CustomerCompanyId")
                         .HasColumnType("INTEGER");
 
                     b.Property<decimal>("DiscountForPlatinumUsers")
@@ -219,7 +219,7 @@ namespace API.Data.Migrations
 
                     b.HasKey("ID");
 
-                    b.HasIndex("CustomerCompanyID");
+                    b.HasIndex("CustomerCompanyId");
 
                     b.ToTable("Merchants");
 
@@ -228,6 +228,7 @@ namespace API.Data.Migrations
                         {
                             ID = 1,
                             Category = 0,
+                            CustomerCompanyId = 1,
                             DiscountForPlatinumUsers = 0.10m,
                             Name = "Pause"
                         },
@@ -235,6 +236,7 @@ namespace API.Data.Migrations
                         {
                             ID = 2,
                             Category = 1,
+                            CustomerCompanyId = 1,
                             DiscountForPlatinumUsers = 0.15m,
                             Name = "MegaGym"
                         },
@@ -242,6 +244,7 @@ namespace API.Data.Migrations
                         {
                             ID = 3,
                             Category = 3,
+                            CustomerCompanyId = 2,
                             DiscountForPlatinumUsers = 0.20m,
                             Name = "Museum of Contemporary Art"
                         },
@@ -249,6 +252,7 @@ namespace API.Data.Migrations
                         {
                             ID = 4,
                             Category = 2,
+                            CustomerCompanyId = 3,
                             DiscountForPlatinumUsers = 0.25m,
                             Name = "Educons Online Learning "
                         });
@@ -286,7 +290,7 @@ namespace API.Data.Migrations
                             ID = 1,
                             Amount = 16000m,
                             CardID = 1,
-                            DateTime = new DateTime(2024, 5, 2, 23, 49, 20, 631, DateTimeKind.Local).AddTicks(1052),
+                            DateTime = new DateTime(2024, 5, 3, 14, 44, 34, 883, DateTimeKind.Local).AddTicks(7383),
                             MerchantID = 1
                         },
                         new
@@ -294,7 +298,7 @@ namespace API.Data.Migrations
                             ID = 2,
                             Amount = 250m,
                             CardID = 2,
-                            DateTime = new DateTime(2024, 5, 2, 23, 49, 20, 631, DateTimeKind.Local).AddTicks(1138),
+                            DateTime = new DateTime(2024, 5, 3, 14, 44, 34, 883, DateTimeKind.Local).AddTicks(7448),
                             MerchantID = 2
                         },
                         new
@@ -302,7 +306,7 @@ namespace API.Data.Migrations
                             ID = 3,
                             Amount = 10000.55m,
                             CardID = 3,
-                            DateTime = new DateTime(2024, 5, 2, 23, 49, 20, 631, DateTimeKind.Local).AddTicks(1148),
+                            DateTime = new DateTime(2024, 5, 3, 14, 44, 34, 883, DateTimeKind.Local).AddTicks(7453),
                             MerchantID = 3
                         },
                         new
@@ -310,7 +314,7 @@ namespace API.Data.Migrations
                             ID = 4,
                             Amount = 1500.12m,
                             CardID = 4,
-                            DateTime = new DateTime(2024, 5, 2, 23, 49, 20, 631, DateTimeKind.Local).AddTicks(1155),
+                            DateTime = new DateTime(2024, 5, 3, 14, 44, 34, 883, DateTimeKind.Local).AddTicks(7457),
                             MerchantID = 4
                         });
                 });
@@ -427,9 +431,13 @@ namespace API.Data.Migrations
 
             modelBuilder.Entity("API.Entities.Merchant", b =>
                 {
-                    b.HasOne("API.Entities.CustomerCompany", null)
+                    b.HasOne("API.Entities.CustomerCompany", "CustomerCompany")
                         .WithMany("MerchantsWithDiscountForPlatinumUsers")
-                        .HasForeignKey("CustomerCompanyID");
+                        .HasForeignKey("CustomerCompanyId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("CustomerCompany");
                 });
 
             modelBuilder.Entity("API.Entities.Transaction", b =>

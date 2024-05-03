@@ -36,16 +36,17 @@ namespace API.Data.Migrations
                     Name = table.Column<string>(type: "TEXT", nullable: false),
                     Category = table.Column<int>(type: "INTEGER", nullable: false),
                     DiscountForPlatinumUsers = table.Column<decimal>(type: "TEXT", nullable: false),
-                    CustomerCompanyID = table.Column<int>(type: "INTEGER", nullable: true)
+                    CustomerCompanyId = table.Column<int>(type: "INTEGER", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Merchants", x => x.ID);
                     table.ForeignKey(
-                        name: "FK_Merchants_CustomerCompanies_CustomerCompanyID",
-                        column: x => x.CustomerCompanyID,
+                        name: "FK_Merchants_CustomerCompanies_CustomerCompanyId",
+                        column: x => x.CustomerCompanyId,
                         principalTable: "CustomerCompanies",
-                        principalColumn: "ID");
+                        principalColumn: "ID",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -155,24 +156,13 @@ namespace API.Data.Migrations
 
             migrationBuilder.InsertData(
                 table: "Merchants",
-                columns: new[] { "ID", "Category", "CustomerCompanyID", "DiscountForPlatinumUsers", "Name" },
+                columns: new[] { "ID", "Category", "CustomerCompanyId", "DiscountForPlatinumUsers", "Name" },
                 values: new object[,]
                 {
-                    { 1, 0, null, 0.10m, "Pause" },
-                    { 2, 1, null, 0.15m, "MegaGym" },
-                    { 3, 3, null, 0.20m, "Museum of Contemporary Art" },
-                    { 4, 2, null, 0.25m, "Educons Online Learning " }
-                });
-
-            migrationBuilder.InsertData(
-                table: "Benefits",
-                columns: new[] { "ID", "Category", "MerchantID", "Name", "Price" },
-                values: new object[,]
-                {
-                    { 1, 0, 1, "Discounted Meal", 500m },
-                    { 2, 1, 2, "Gym Membership", 1500m },
-                    { 3, 3, 3, "Museum Ticket", 1000m },
-                    { 4, 2, 4, "Online Course", 10000m }
+                    { 1, 0, 1, 0.10m, "Pause" },
+                    { 2, 1, 1, 0.15m, "MegaGym" },
+                    { 3, 3, 2, 0.20m, "Museum of Contemporary Art" },
+                    { 4, 2, 3, 0.25m, "Educons Online Learning " }
                 });
 
             migrationBuilder.InsertData(
@@ -186,6 +176,17 @@ namespace API.Data.Migrations
                     { 4, 2, "stefan.perovic@yahoo.com", "Stefan", "Perovic", 1 },
                     { 5, 1, "mitarjovic@gmail.com", "Mitar", "Jovic", 2 },
                     { 6, 2, "rista88@gmail.com", "Rista", "Gocic", 2 }
+                });
+
+            migrationBuilder.InsertData(
+                table: "Benefits",
+                columns: new[] { "ID", "Category", "MerchantID", "Name", "Price" },
+                values: new object[,]
+                {
+                    { 1, 0, 1, "Discounted Meal", 500m },
+                    { 2, 1, 2, "Gym Membership", 1500m },
+                    { 3, 3, 3, "Museum Ticket", 1000m },
+                    { 4, 2, 4, "Online Course", 10000m }
                 });
 
             migrationBuilder.InsertData(
@@ -206,10 +207,10 @@ namespace API.Data.Migrations
                 columns: new[] { "ID", "Amount", "CardID", "DateTime", "MerchantID" },
                 values: new object[,]
                 {
-                    { 1, 16000m, 1, new DateTime(2024, 5, 2, 23, 49, 20, 631, DateTimeKind.Local).AddTicks(1052), 1 },
-                    { 2, 250m, 2, new DateTime(2024, 5, 2, 23, 49, 20, 631, DateTimeKind.Local).AddTicks(1138), 2 },
-                    { 3, 10000.55m, 3, new DateTime(2024, 5, 2, 23, 49, 20, 631, DateTimeKind.Local).AddTicks(1148), 3 },
-                    { 4, 1500.12m, 4, new DateTime(2024, 5, 2, 23, 49, 20, 631, DateTimeKind.Local).AddTicks(1155), 4 }
+                    { 1, 16000m, 1, new DateTime(2024, 5, 3, 14, 44, 34, 883, DateTimeKind.Local).AddTicks(7383), 1 },
+                    { 2, 250m, 2, new DateTime(2024, 5, 3, 14, 44, 34, 883, DateTimeKind.Local).AddTicks(7448), 2 },
+                    { 3, 10000.55m, 3, new DateTime(2024, 5, 3, 14, 44, 34, 883, DateTimeKind.Local).AddTicks(7453), 3 },
+                    { 4, 1500.12m, 4, new DateTime(2024, 5, 3, 14, 44, 34, 883, DateTimeKind.Local).AddTicks(7457), 4 }
                 });
 
             migrationBuilder.CreateIndex(
@@ -230,9 +231,9 @@ namespace API.Data.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_Merchants_CustomerCompanyID",
+                name: "IX_Merchants_CustomerCompanyId",
                 table: "Merchants",
-                column: "CustomerCompanyID");
+                column: "CustomerCompanyId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Transactions_CardID",

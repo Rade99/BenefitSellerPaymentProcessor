@@ -20,6 +20,15 @@ namespace API.Tests.Services
             _transactionService = new TransactionService(_dataAccessService);
         }
 
+        private void SetupMockData(TransactionDto transactionDto, Benefit benefit, Card card, User user, CustomerCompany company)
+        {
+            A.CallTo(() => _dataAccessService.GetBenefitByIdAsync(A<int>._)).Returns(Task.FromResult(benefit));
+            A.CallTo(() => _dataAccessService.GetCardByIdAsync(A<int>._)).Returns(Task.FromResult(card));
+            A.CallTo(() => _dataAccessService.GetUserByIdAsync(A<int>._)).Returns(Task.FromResult(user));
+            A.CallTo(() => _dataAccessService.GetCompanyByUserIdAsync(A<int>._)).Returns(Task.FromResult(company));
+        }
+
+
         [Fact]
         public async Task ProcessTransaction_InvalidBenefit_ReturnsBadRequest()
         {
@@ -71,7 +80,6 @@ namespace API.Tests.Services
             {
                 CardId = 456
             };
-
             var expiredCard = new Card { ExpiryDate = DateTime.UtcNow.AddDays(-1) };
 
             A.CallTo(() => _dataAccessService.GetCardByIdAsync(A<int>._))
@@ -85,34 +93,6 @@ namespace API.Tests.Services
             result.Message.Should().Be("Card has expired.");
         }
 
-
-        [Fact]
-        public async Task ProcessTransaction_InvalidMerchant_ReturnsBadRequest()
-        {
-            // Arrange
-            var transactionDto = new TransactionDto
-            {
-                MerchantId = 456
-            };
-            var card = new Card { ExpiryDate = DateTime.UtcNow.AddDays(1) };
-
-            A.CallTo(() => _dataAccessService.GetBenefitByIdAsync(A<int>._))
-                .Returns(Task.FromResult<Benefit?>(new Benefit()));
-
-            A.CallTo(() => _dataAccessService.GetCardByIdAsync(A<int>._))
-                .Returns(Task.FromResult<Card?>(card));
-
-            A.CallTo(() => _dataAccessService.GetMerchantByIdAsync(transactionDto.MerchantId))
-                .Returns(Task.FromResult<Merchant?>(null));
-
-            // Act
-            var result = await _transactionService.ProcessTransactionAsync(transactionDto);
-
-            // Assert
-            result.IsSuccessful.Should().BeFalse();
-            result.Message.Should().Contain($"Merchant with ID {transactionDto.MerchantId} does not exist.");
-        }
-
         [Fact]
         public async Task ProcessTransaction_InvalidUserBenefitAccess_ReturnsBadRequest()
         {
@@ -121,23 +101,10 @@ namespace API.Tests.Services
             var user = new User { UserType = UserType.Standard };
             var company = new CustomerCompany { BenefitCategoryForStandardUsers = BenefitCategory.FoodAndDrink };
             var merchant = new Merchant { Category = BenefitCategory.Recreation };
-
+            var benefit = new Benefit { Merchant = merchant };
             var card = new Card { ExpiryDate = DateTime.UtcNow.AddDays(1) };
 
-            A.CallTo(() => _dataAccessService.GetBenefitByIdAsync(A<int>._))
-                .Returns(Task.FromResult<Benefit?>(new Benefit()));
-
-            A.CallTo(() => _dataAccessService.GetCardByIdAsync(A<int>._))
-                .Returns(Task.FromResult<Card?>(card));
-
-            A.CallTo(() => _dataAccessService.GetMerchantByIdAsync(A<int>._))
-                .Returns(Task.FromResult<Merchant?>(merchant));
-
-            A.CallTo(() => _dataAccessService.GetUserByIdAsync(A<int>._))
-                .Returns(Task.FromResult<User?>(user));
-
-            A.CallTo(() => _dataAccessService.GetCompanyByUserIdAsync(A<int>._))
-                .Returns(Task.FromResult<CustomerCompany?>(company));
+            SetupMockData(transactionDto, benefit, card, user, company);
 
             // Act
             var result = await _transactionService.ProcessTransactionAsync(transactionDto);
@@ -152,29 +119,19 @@ namespace API.Tests.Services
         {
             // Arrange
             var transactionDto = A.Fake<TransactionDto>();
-            var user = new User { UserType = UserType.Premium };    
-            var benefit = new Benefit { Price = 150 };
-
-            var insufficientFundsCard = new Card 
+            var user = new User { UserType = UserType.Premium };
+            var benefit = new Benefit 
             { 
-                ExpiryDate = DateTime.UtcNow.AddDays(1), 
-                Balance = 100 
+                Price = 150, 
+                Merchant = new Merchant() 
+            };
+            var insufficientFundsCard = new Card
+            {
+                ExpiryDate = DateTime.UtcNow.AddDays(1),
+                Balance = 100
             };
 
-            A.CallTo(() => _dataAccessService.GetBenefitByIdAsync(A<int>._))
-                .Returns(Task.FromResult<Benefit?>(benefit));
-
-            A.CallTo(() => _dataAccessService.GetCardByIdAsync(A<int>._))
-                .Returns(Task.FromResult<Card?>(insufficientFundsCard));
-
-            A.CallTo(() => _dataAccessService.GetMerchantByIdAsync(A<int>._))
-                .Returns(Task.FromResult<Merchant?>(new Merchant()));
-
-            A.CallTo(() => _dataAccessService.GetUserByIdAsync(A<int>._))
-                .Returns(Task.FromResult<User?>(user));
-
-            A.CallTo(() => _dataAccessService.GetCompanyByUserIdAsync(A<int>._))
-                .Returns(Task.FromResult<CustomerCompany?>(new CustomerCompany()));
+            SetupMockData(transactionDto, benefit, insufficientFundsCard, user, new CustomerCompany());
 
             // Act
             var result = await _transactionService.ProcessTransactionAsync(transactionDto);
@@ -190,29 +147,20 @@ namespace API.Tests.Services
             // Arrange
             var transactionDto = A.Fake<TransactionDto>();
             var user = new User { UserType = UserType.Standard };
-            var benefit = new Benefit { Price = 50 };
+            var merchant = new Merchant { Category = BenefitCategory.FoodAndDrink };
+            var benefit = new Benefit 
+            { 
+                Price = 50, 
+                Merchant = merchant 
+            };
             var card = new Card
             {
                 ExpiryDate = DateTime.UtcNow.AddDays(1),
                 Balance = 200
-            };
-            var merchant = new Merchant { Category = BenefitCategory.FoodAndDrink };
+            };        
             var company = new CustomerCompany { BenefitCategoryForStandardUsers = BenefitCategory.FoodAndDrink };
 
-            A.CallTo(() => _dataAccessService.GetBenefitByIdAsync(A<int>._))
-                .Returns(Task.FromResult<Benefit?>(benefit));
-
-            A.CallTo(() => _dataAccessService.GetCardByIdAsync(A<int>._))
-                .Returns(Task.FromResult<Card?>(card));
-
-            A.CallTo(() => _dataAccessService.GetMerchantByIdAsync(A<int>._))
-                .Returns(Task.FromResult<Merchant?>(merchant));
-
-            A.CallTo(() => _dataAccessService.GetUserByIdAsync(A<int>._))
-                .Returns(Task.FromResult<User?>(user));
-
-            A.CallTo(() => _dataAccessService.GetCompanyByUserIdAsync(A<int>._))
-                .Returns(Task.FromResult<CustomerCompany?>(company));
+            SetupMockData(transactionDto, benefit, card, user, company);
 
             // Act
             var result = await _transactionService.ProcessTransactionAsync(transactionDto);
@@ -228,27 +176,18 @@ namespace API.Tests.Services
             // Arrange
             var transactionDto = A.Fake<TransactionDto>();
             var user = new User { UserType = UserType.Premium };
-            var benefit = new Benefit { Price = 50 };
+            var benefit = new Benefit 
+            { 
+                Price = 50,
+                Merchant = new Merchant()
+            };
             var card = new Card
             {
                 ExpiryDate = DateTime.UtcNow.AddDays(1),
                 Balance = 200
             };
 
-            A.CallTo(() => _dataAccessService.GetBenefitByIdAsync(A<int>._))
-                .Returns(Task.FromResult<Benefit?>(benefit));
-
-            A.CallTo(() => _dataAccessService.GetCardByIdAsync(A<int>._))
-                .Returns(Task.FromResult<Card?>(card));
-
-            A.CallTo(() => _dataAccessService.GetMerchantByIdAsync(A<int>._))
-                .Returns(Task.FromResult<Merchant?>(new Merchant()));
-
-            A.CallTo(() => _dataAccessService.GetUserByIdAsync(A<int>._))
-                .Returns(Task.FromResult<User?>(user));
-
-            A.CallTo(() => _dataAccessService.GetCompanyByUserIdAsync(A<int>._))
-                .Returns(Task.FromResult<CustomerCompany?>(new CustomerCompany()));
+            SetupMockData(transactionDto, benefit, card, user, new CustomerCompany());
 
             // Act
             var result = await _transactionService.ProcessTransactionAsync(transactionDto);
@@ -264,27 +203,18 @@ namespace API.Tests.Services
             // Arrange
             var transactionDto = A.Fake<TransactionDto>();
             var user = new User { UserType = UserType.Platinum };
-            var benefit = new Benefit { Price = 100 };
+            var benefit = new Benefit 
+            { 
+                Price = 100,
+                Merchant = new Merchant()
+            };
             var card = new Card
             {
                 ExpiryDate = DateTime.UtcNow.AddDays(1),
                 Balance = 200
             };
-     
-            A.CallTo(() => _dataAccessService.GetBenefitByIdAsync(A<int>._))
-                .Returns(Task.FromResult<Benefit?>(benefit));
 
-            A.CallTo(() => _dataAccessService.GetCardByIdAsync(A<int>._))
-                .Returns(Task.FromResult<Card?>(card));
-
-            A.CallTo(() => _dataAccessService.GetMerchantByIdAsync(A<int>._))
-                .Returns(Task.FromResult<Merchant?>(new Merchant()));
-
-            A.CallTo(() => _dataAccessService.GetUserByIdAsync(A<int>._))
-                .Returns(Task.FromResult<User?>(user));
-
-            A.CallTo(() => _dataAccessService.GetCompanyByUserIdAsync(A<int>._))
-                .Returns(Task.FromResult<CustomerCompany?>(new CustomerCompany()));
+            SetupMockData(transactionDto, benefit, card, user, new CustomerCompany());
 
             // Act
             var result = await _transactionService.ProcessTransactionAsync(transactionDto);
@@ -300,30 +230,22 @@ namespace API.Tests.Services
             // Arrange
             var transactionDto = A.Fake<TransactionDto>();
             var user = new User { UserType = UserType.Platinum };
-            var benefit = new Benefit { Price = 100 };
+            var merchant = new Merchant { DiscountForPlatinumUsers = 0.10m };
+            var benefit = new Benefit 
+            { 
+                Price = 100,
+                Merchant = merchant
+            };
             var card = new Card
             {
                 ExpiryDate = DateTime.UtcNow.AddDays(1),
                 Balance = 200
             };
-            var merchant = new Merchant { DiscountForPlatinumUsers = 0.10m };
-            var company = new CustomerCompany{};
+
+            var company = new CustomerCompany { };
             company.MerchantsWithDiscountForPlatinumUsers.Add(merchant);
 
-            A.CallTo(() => _dataAccessService.GetBenefitByIdAsync(A<int>._))
-                .Returns(Task.FromResult<Benefit?>(benefit));
-
-            A.CallTo(() => _dataAccessService.GetCardByIdAsync(A<int>._))
-                .Returns(Task.FromResult<Card?>(card));
-
-            A.CallTo(() => _dataAccessService.GetMerchantByIdAsync(A<int>._))
-                .Returns(Task.FromResult<Merchant?>(merchant));
-
-            A.CallTo(() => _dataAccessService.GetUserByIdAsync(A<int>._))
-                .Returns(Task.FromResult<User?>(user));
-
-            A.CallTo(() => _dataAccessService.GetCompanyByUserIdAsync(A<int>._))
-                .Returns(Task.FromResult<CustomerCompany?>(company));
+            SetupMockData(transactionDto, benefit, card, user, company);
 
             // Act
             var result = await _transactionService.ProcessTransactionAsync(transactionDto);
