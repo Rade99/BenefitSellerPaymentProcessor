@@ -29,6 +29,10 @@ The Benefit Card Payment Processor is a transaction processing system designed t
 - **FakeItEasy**: Mocking framework used for creating fake objects for testing.
 - **FluentAssertions**: Fluent API for asserting the results of unit tests, providing more readable and expressive test code.
 
+### Swagger
+
+Swagger is a tool that allows for documenting and testing APIs. The API has Swagger integration for testing the API's functionality. Swagger will be available at the `/swagger` endpoint when the application is running in the Development environment.
+
 ## Getting Started
 
 1. Clone this repository to your local machine.
@@ -56,7 +60,3 @@ Once the image is built, run the Docker container using the following command:
 docker run --name payment-processor -e ASPNETCORE_ENVIRONMENT=Development -p 8080:8080 -p 8081:8081 payment-processor
 ```
 **Note:** Setting `ASPNETCORE_ENVIRONMENT=Development` is there becouse of Swagger.
-
-## Swagger
-
-Swagger is a tool that allows for documenting and testing APIs. The API has Swagger integration for testing the API's functionality. Swagger will be available at the `/swagger` endpoint when the application is running in the Development environment.
