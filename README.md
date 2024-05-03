@@ -2,7 +2,7 @@
 
 ## Overview
 
-This project represents an implementation of a transaction processing system and tracking of successful and unsuccessful transactions.
+The Benefit Card Payment Processor is a transaction processing system designed to facilitate payments using benefit cards. It provides functionalities for tracking information about both successful and unsuccessful transactions, ensuring efficient handling of transaction requests.
 
 ## Technologies
 
@@ -11,12 +11,23 @@ This project represents an implementation of a transaction processing system and
 - **SQLite**: Lightweight and fast SQL database used for development environment.
 
 ## Project Structure
-- **Controllers**: Contains ASP.NET Core web API controllers serving as the entry point into the application.
-- **Data**: Contains the DbContext and migrations, as well as initial data stored in the database.
-- **Entities**: Defines the entity classes used in the application.
-- **DTOs**: Defines Data Transfer Objects.
-- **Middleware**: Custom middleware for exception handling.
-- **Services**: Contains the business logic of the application, data access service and service interfaces.
+
+- **API**: Contains the ASP.NET Core web API project.
+  - **Controllers**: Contains ASP.NET Core web API controllers serving as the entry point into the application.
+  - **Data**: Contains the DbContext and migrations, as well as initial data stored in the database.
+  - **Entities**: Defines the entity classes used in the application.
+  - **DTOs**: Defines Data Transfer Objects.
+  - **Middleware**: Custom middleware for exception handling.
+  - **Services**: Contains the business logic of the application, data access service and service interfaces.
+  - **PaymentProcessor.db**: SQLite database file.
+
+- **API.Tests**: Contains unit tests for the API project.
+
+## Testing
+
+- **XUnit**: Testing framework used for unit testing.
+- **FakeItEasy**: Mocking framework used for creating fake objects for testing.
+- **FluentAssertions**: Fluent API for asserting the results of unit tests, providing more readable and expressive test code.
 
 ## Getting Started
 
